@@ -47,7 +47,7 @@
 
 ;check if it is unique
 
-(assert (not x23))
+(assert (not (or x41 x32 x23)))
 
 (check-sat)
 (get-model)
