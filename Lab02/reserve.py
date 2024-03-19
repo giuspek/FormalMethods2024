@@ -1,6 +1,6 @@
 from pysmt.shortcuts import *
 
-msat = UnsatCoreSolver()
+msat = Solver()
 formula = []
 vars = {"x{}{}".format(i,j): Symbol("x{}{}".format(i,j), BOOL) for i in "abcde" for j in range(1,6)}
 
