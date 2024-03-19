@@ -31,7 +31,6 @@ for i in range(len(guests_conditions)):
 	if res:
 		pass
 	else:
-		print(msat.get_unsat_core())
 		print("We can satisfy in order {} people".format(i))
 		exit()
 
