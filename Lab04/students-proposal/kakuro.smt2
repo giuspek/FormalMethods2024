@@ -36,20 +36,30 @@
 (declare-const x65 Int)
 
 (assert (= (+ x22 x23 x24) x21))
+(assert (distinct x22 x23 x24))
 (assert (= (+ x22 x32 x42) x12))
+(assert (distinct x22 x32 x42))
 
 (assert (= x13 (+ x23 x33 x43 x53 x63)))
+(assert (distinct x23 x33 x43 x53 x63))
 (assert (= x14 (+ x24 x34)))
+(assert (distinct x24 x34))
 
 (assert (= x31 (+ x32 x33 x34)))
+(assert (distinct x32 x33 x34))
 (assert (= x41 (+ x42 x43)))
-
+(assert (distinct x42 x43))
 
 (assert (= x52 (+ x53 x54 x55)))
+(assert (distinct x53 x54 x55))
 (assert (= x62 (+ x63 x64 x65)))
+(assert (distinct x63 x64 x65))
+
 
 (assert (= x44 (+ x54 x64)))
+(assert (distinct x54 x64))
 (assert (= x45 (+ x55 x65)))
+(assert (distinct x55 x65))
 
 (assert (and (>= x22 1) (<= x22 9)))
 (assert (and (>= x23 1) (<= x23 9)))
