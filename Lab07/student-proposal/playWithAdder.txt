@@ -1,0 +1,12 @@
+After how many steps the adder stores the computed final sum
+value? Is this number constant? Can you explain its
+behaviour?
+
+The number of steps are never constants and depends on the initial numbers n1,n2. The number of step increase as the number of bits that need to change increase.
+
+What happens if we initialize both sum and cout inside the
+bit-adder as FALSE? Can you explain which is the main
+difference with respect to the original algorithm?
+
+if we initialize S and Count to FALSE we do not get any difference since the value of S and Count in the next state doesn't depend on previous value of S or Count
+

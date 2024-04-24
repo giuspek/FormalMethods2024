@@ -22,12 +22,26 @@ MODULE adder(in1,in2)
         overflow := bit[3].cout;
         
 MODULE main
-    FROZENVAR
+        
+    VAR
         in1 : array 0..3 of boolean;
         in2 : array 0..3 of boolean;
-    VAR
+        reset : boolean;
         a: adder(in1,in2);
     DEFINE
         n1 := toint(in1[0]) + 2 * toint(in1[1]) + 4 * toint(in1[2]) + 8 * toint(in1[3]);
         n2 := toint(in2[0]) + 2 * toint(in2[1]) + 4 * toint(in2[2]) + 8 * toint(in2[3]);
         result := toint(a.S0) + 2 * toint(a.S1) + 4 * toint(a.S2) + 8 * toint(a.S3) + 16 * toint(a.overflow);
+        full_sum := n1 + n2;
+    TRANS
+        case
+        !reset : next(in1[0]) = in1[0];
+        !reset : next(in1[1]) = in1[1];
+        !reset : next(in1[2]) = in1[2];
+        !reset : next(in1[3]) = in1[3];
+        !reset : next(in2[0]) = in2[0];
+        !reset : next(in2[1]) = in2[1];
+        !reset : next(in2[2]) = in2[2];
+        !reset : next(in2[3]) = in2[3];
+        TRUE : FALSE ;
+        esac;
