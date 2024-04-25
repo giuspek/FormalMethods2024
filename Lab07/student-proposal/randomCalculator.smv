@@ -1,0 +1,49 @@
+MODULE main
+    FROZENVAR
+        arr1: array 1..3 of 1..10;
+        arr2: array 1..3 of 1..10;
+        arrOperator: array 1..3 of {sum, sub, mul};
+    VAR
+        i: 1..3;
+        res: array 1..3 of -100..100;
+    ASSIGN
+        init(i):=1;
+        init(res[1]):=0;
+        init(res[2]):=0;
+        init(res[3]):=0;
+        next(i):= 
+            case
+            i < 3: i+1;
+            TRUE: 3;
+            esac;
+        next(res[1]):=
+            case
+                i=1: 
+                case
+                arrOperator[1] = sum: arr1[1] + arr2[1];
+                arrOperator[1] = sub: arr1[1] - arr2[1];
+                arrOperator[1] = mul: arr1[1] * arr2[1];
+                esac;
+                TRUE: res[1];
+            esac;
+        next(res[2]):=
+            case
+                i=2: 
+                case
+                arrOperator[2] = sum: arr1[2] + arr2[2];
+                arrOperator[2] = sub: arr1[2] - arr2[2];
+                arrOperator[2] = mul: arr1[2] * arr2[2];
+                esac;
+                TRUE: res[2];
+            esac;
+        next(res[3]):=
+            case
+                i=3: 
+                case
+                arrOperator[3] = sum: arr1[3] + arr2[3];
+                arrOperator[3] = sub: arr1[3] - arr2[3];
+                arrOperator[3] = mul: arr1[3] * arr2[3];
+                esac;
+                TRUE: res[3];
+            esac;
+        
