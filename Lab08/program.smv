@@ -1,0 +1,31 @@
+MODULE main
+	VAR
+		pc : {l1, l2, l3, l4, l5};
+		a : 0..20;
+		b : 0..20;
+
+	ASSIGN
+		init(a) := 16;
+		init(b) := 4;
+		init(pc) := l1;
+
+		next(pc) := case
+			pc = l1 & a != b: l2;
+			pc = l1 & a = b:  l5;
+			pc = l2 & a > b:  l3;
+			pc = l2 & a <= b: l4;
+			pc = l3 | pc = l4 : l1;
+			TRUE: l5;
+		esac;
+
+		next(a) := case
+			pc = l3 & a > b : a - b;
+			TRUE: a;
+		esac;
+
+		next(b) := case
+			pc = l4 & a <= b : b - a;
+			TRUE: b;
+		esac;
+
+LTLSPEC ! F (pc = l5)

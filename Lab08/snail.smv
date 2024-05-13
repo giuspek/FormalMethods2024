@@ -1,0 +1,43 @@
+MODULE main
+	VAR
+		move : {DICE, GOOD, BAD};
+		pos: 0..10;
+		dice: 1..3;
+		steps: 0..5;
+	FROZENVAR
+		good: array 0..1 of 1..10;
+		bad: array 0..1 of 1..10;
+
+	INIT
+		move = DICE & pos = 0 & steps = 0 &
+			(good[0] != good[1] & good[0] != bad[0] & good[0] != bad[1]) &
+			(good[1] != bad[0] & good[1] != bad[1]) &
+			(bad[0] != bad[1])
+
+	TRANS
+		next(dice) != dice
+
+	TRANS
+		move = DICE -> (next(pos) = min(pos + next(dice), 10))
+
+	TRANS
+		move = GOOD -> (next(pos) = min(pos + 2, 10))
+
+	TRANS
+		move = BAD -> (next(pos) = max(pos - 2, 0))
+
+	ASSIGN
+		next(steps) := case
+			move = DICE: min(steps + 1, 5);
+			TRUE: steps;
+		esac;
+
+	ASSIGN
+		next(move) := case
+			next(pos) = good[0] | next(pos) = good[1]: GOOD;
+			next(pos) = bad[0] | next(pos) = bad[1] : BAD;
+			TRUE: DICE;
+		esac;
+
+LTLSPEC
+	!F (steps <= 2 & pos = 10)
