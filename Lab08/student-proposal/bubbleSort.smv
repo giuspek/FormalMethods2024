@@ -1,0 +1,27 @@
+MODULE main
+	VAR
+        arr : array 0..4 of 1..5;
+        i: 0..6;
+        swapped: boolean;
+    INIT
+        arr[0] = 4 & arr[1] = 1 & arr[2] = 3 & arr[3] = 2 & arr[4] = 5 
+        & swapped = FALSE & i = 1;
+    ASSIGN
+        next(i) := case
+            i < 4 : i+1;
+            swapped = TRUE : 1;
+            TRUE : 1;
+        esac;
+    TRANS
+        (i = 1 & arr[ 0 ] > arr[1]) -> (next(arr[0]) = arr[1] & next(arr[1]) = arr[0]); 
+    TRANS   
+        (!(i = 1 & arr[ 0 ] > arr[1] ) -> next(arr[0]) = arr[0]);
+    TRANS
+        (i = 2 & arr[ 1 ] > arr[2]) -> (next(arr[1]) = arr[2] & next(arr[2]) = arr[1]);
+    TRANS
+        (i = 3 & arr[ 2 ] > arr[3]) -> (next(arr[2]) = arr[3] & next(arr[3]) = arr[1]);
+    TRANS
+        (i = 4 & arr[ 3 ] > arr[4]) -> (next(arr[3]) = arr[4] & next(arr[4]) = arr[1]);
+    TRANS   
+        (!(i = 2 & arr[ 1 ] > arr[2] ) -> next(arr[1]) = arr[1]);
+    
