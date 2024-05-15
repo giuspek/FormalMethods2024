@@ -1,0 +1,78 @@
+MODULE bit-adder(in1, in2, cin)
+    VAR
+        s: boolean;
+        cout: boolean;
+    ASSIGN
+        next(s) := cin xor (in1 xor in2);
+        next(cout) := ((in1 xor in2 ) & cin) | (in1 & in2);
+
+MODULE adder(in1,in2)
+    VAR
+        bit[0] : bit-adder(in1[0], in2[0], FALSE);
+        bit[1] : bit-adder(in1[1], in2[1], bit[0].cout);
+        bit[2] : bit-adder(in1[2], in2[2], bit[1].cout);
+        bit[3] : bit-adder(in1[3], in2[3], bit[2].cout);
+    DEFINE
+        S0 := bit[0].s;
+        S1 := bit[1].s;
+        S2 := bit[2].s;
+        S3 := bit[3].s;
+        overflow := bit[3].cout;
+        
+MODULE main
+        
+    VAR
+        in1 : array 0..3 of boolean;
+        in2 : array 0..3 of boolean;
+        reset : boolean;
+        a: adder(in1,in2);
+    DEFINE
+        n1 := toint(in1[0]) + 2 * toint(in1[1]) + 4 * toint(in1[2]) + 8 * toint(in1[3]);
+        n2 := toint(in2[0]) + 2 * toint(in2[1]) + 4 * toint(in2[2]) + 8 * toint(in2[3]);
+        result := toint(a.S0) + 2 * toint(a.S1) + 4 * toint(a.S2) + 8 * toint(a.S3) + 16 * toint(a.overflow);
+        full_sum := n1 + n2;
+    ASSIGN
+         next(in1[0]) :=
+            case
+                reset : { TRUE , FALSE};
+                TRUE : in1[0];
+            esac;
+        next(in1[1]) :=
+            case
+                reset : { FALSE , TRUE};
+                TRUE : in1[1];
+            esac;
+        next(in1[2]) :=
+            case
+                reset : { FALSE , TRUE};
+                TRUE : in1[2];
+            esac;
+        next(in1[3]) :=
+            case
+                reset : { TRUE , FALSE};
+                TRUE : in1[3];
+            esac;
+
+        next(in2[0]) :=
+            case
+                reset : { TRUE , FALSE};
+                TRUE : in2[0];
+            esac;
+
+        next(in2[1]) :=
+            case
+                reset : { TRUE , FALSE};
+                TRUE : in2[1];
+            esac;
+
+        next(in2[2]) :=
+            case
+                reset : { TRUE , FALSE};
+                TRUE : in2[2];
+            esac;
+        next(in2[3]) :=
+            case
+                reset : { TRUE , FALSE};
+                TRUE : in2[3];
+            esac;
+        

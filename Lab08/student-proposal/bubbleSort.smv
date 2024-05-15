@@ -1,0 +1,36 @@
+MODULE main
+	VAR
+        arr : array 0..4 of 1..5;
+        i: 0..6;
+        swapped: boolean;
+        swap: {s1,s2,s3,s4,empty};
+    INIT
+        arr[0] = 4 & arr[1] = 1 & arr[2] = 3 & arr[3] = 2 & arr[4] = 5 
+        & swapped = FALSE & i = 1 & swap = empty;
+    ASSIGN
+        next(i) := case
+            (next(swapped) = TRUE) : 1;
+            i < 4 : i+1;
+            TRUE : 1;
+        esac;
+
+    TRANS case
+        (i = 1 & arr[ 0 ] > arr[1]) : (next(swap) = s1 & next(swapped) = TRUE);
+        (i = 2 & arr[ 1 ] > arr[2]) : (next(swap) = s2 & next(swapped) = TRUE);
+        (i = 3 & arr[ 2 ] > arr[3]) : (next(swap) = s3 & next(swapped) = TRUE );
+        (i = 4 & arr[ 3 ] > arr[4]) : (next(swap) = s4 & next(swapped) = TRUE);
+        TRUE : (next(swap) = empty & next(swapped) = FALSE);
+        esac;   
+    TRANS   
+        ( (next(swap) = empty & next(swapped) = FALSE) -> (next(arr[0]) = arr[0]) & next(arr[1]) = arr[1] & next(arr[2]) = arr[2] & next(arr[3])=arr[3] &  next(arr[4]) = arr[4]) ;
+    TRANS   
+         (next(swap) = s1 & next(swapped) = TRUE ) -> (next(arr[1]) = arr[0] &  next(arr[0]) = arr[1] & next(arr[2]) = arr[2] & next(arr[3])=arr[3] &  next(arr[4]) = arr[4]) ;
+    TRANS   
+         (next(swap) = s2 & next(swapped) = TRUE ) -> (next(arr[2]) = arr[1] &  next(arr[1]) = arr[2] & next(arr[0]) = arr[0] & next(arr[3])=arr[3] &  next(arr[4]) = arr[4]) ;
+    TRANS   
+         (next(swap) = s3 & next(swapped) = TRUE ) -> (next(arr[3]) = arr[2] &  next(arr[2]) = arr[3] & next(arr[0]) = arr[0] & next(arr[1])=arr[1] &  next(arr[4]) = arr[4]) ;
+    TRANS   
+         (next(swap) = s4 & next(swapped) = TRUE ) -> (next(arr[4]) = arr[3] &  next(arr[3]) = arr[4] & next(arr[2]) = arr[2] & next(arr[1])=arr[1] &  next(arr[0]) = arr[0] ) ;
+    
+    LTLSPEC  G F !(swap = empty & swapped = FALSE);
+    LTLSPEC  G F !(arr[0] < arr[1] & arr[1]<arr[2] & arr[2]<arr[3] & arr[3]<arr[4]);

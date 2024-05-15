@@ -1,0 +1,31 @@
+(set-option :produce-models true)
+
+(declare-const A Bool)
+(declare-const B Bool)
+(declare-const C Bool)
+(declare-const D Bool)
+(declare-const E Bool)
+(declare-const F Bool)
+(declare-const G Bool)
+
+
+(assert (or A B))
+(assert (or B C))
+(assert (or C E))
+(assert (or C D))
+(assert (or E D))
+(assert (or E F))
+(assert (or D G))
+
+(assert-soft A :weight 1 :id penalty)
+(assert-soft C :weight 1 :id penalty)
+(assert-soft B :weight 1 :id penalty)
+(assert-soft D :weight 1 :id penalty)
+(assert-soft E :weight 1 :id penalty)
+(assert-soft F :weight 1 :id penalty)
+(assert-soft G :weight 1 :id penalty)
+
+(maximize penalty)
+(check-sat)
+(get-objectives)
+(get-model)
