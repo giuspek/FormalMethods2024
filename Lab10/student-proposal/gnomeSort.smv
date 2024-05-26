@@ -1,0 +1,54 @@
+MODULE gnomeSort (arr, len)
+    VAR
+        pos: 0..len+1;
+    ASSIGN
+        init(pos) := 0;
+        next(pos) := case
+            pos >= (len+1) : pos;
+            (pos = 0 | arr[pos] >= arr[pos -1 ]) : pos + 1;
+            TRUE: pos - 1;
+            esac;
+    DEFINE
+        swap := next(pos) = pos -1;
+
+MODULE main
+    VAR
+        arr: array 0..4 of {9,7,5,3,1};
+        sorter: gnomeSort(arr,4);
+    INIT
+        arr[0] = 9 &
+        arr[1] = 7 &
+        arr[2] = 5 &
+        arr[3] = 3 &
+        arr[4] = 1;
+    ASSIGN  
+        next(arr[0]) := case
+            sorter.pos = 1 & sorter.swap : arr[1];
+            TRUE: arr[0];
+        esac;
+        next(arr[1]) := case
+            sorter.pos = 1 & sorter.swap : arr[0];
+            sorter.pos = 2 & sorter.swap : arr[2];
+            TRUE: arr[1];
+        esac;
+        next(arr[2]) := case
+            sorter.pos = 2 & sorter.swap : arr[1];
+            sorter.pos = 3 & sorter.swap : arr[3];
+            TRUE: arr[2];
+        esac;
+        next(arr[3]) := case
+            sorter.pos = 3 & sorter.swap : arr[2];
+            sorter.pos = 4 & sorter.swap : arr[4];
+            TRUE: arr[3];
+        esac;
+
+        next(arr[4]) := case
+            sorter.pos = 4 & sorter.swap : arr[3];
+            TRUE: arr[4];
+        esac;
+    DEFINE 
+        sorted := arr[0] <= arr[1] & arr[1] <= arr[2] & arr[2] <= arr[3] & arr[3] <= arr[4];
+
+    LTLSPEC !G F sorter.pos = 5;
+    LTLSPEC !F G sorted;
+    LTLSPEC !F (!(sorter.pos = 5) U sorted);
