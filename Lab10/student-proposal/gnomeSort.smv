@@ -1,15 +1,27 @@
 MODULE gnomeSort (arr, len)
     VAR
-        pos: 0..len+1;
+        pos: 0..len;
+        pc: 10..15;
     ASSIGN
+        init(pc) := 10;
         init(pos) := 0;
         next(pos) := case
-            pos >= (len+1) : pos;
-            (pos = 0 | arr[pos] >= arr[pos -1 ]) : pos + 1;
-            TRUE: pos - 1;
+            next(pc = 13) & pos + 1 <= len  : pos + 1;
+            next(pc = 14) & pos - 1 > 0: pos - 1 ;
+            TRUE: pos;
             esac;
+
+        next(pc):= case
+            (pc = 10): 11;
+            (pc = 11 & (pos + 1) > len  & (pos = 0 | arr[pos] >= arr[pos - 1]) ) : 15;
+            (pc = 11 & pos <= len ) : 12;
+            (pc = 12 & (pos = 0 | arr[pos] >= arr[pos - 1])) : 13;
+            (pc = 12 & !(pos = 0 | arr[pos] >= arr[pos - 1])) : 14; 
+            (pc = 13 | pc = 14) : 11; 
+            TRUE: pc;
+             esac;
     DEFINE
-        swap := next(pos) = pos -1;
+        swap := next(pc) = 14 ;
 
 MODULE main
     VAR
@@ -49,6 +61,6 @@ MODULE main
     DEFINE 
         sorted := arr[0] <= arr[1] & arr[1] <= arr[2] & arr[2] <= arr[3] & arr[3] <= arr[4];
 
-    LTLSPEC !G F sorter.pos = 5;
+    LTLSPEC !G F sorter.pc = 15;
     LTLSPEC !F G sorted;
-    LTLSPEC !F (!(sorter.pos = 5) U sorted);
+    LTLSPEC !F (!(sorter.pos = 15) U sorted);
