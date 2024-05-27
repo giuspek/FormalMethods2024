@@ -1,0 +1,43 @@
+MODULE main
+    VAR
+        leftArr: array 1..2 of 0..3;
+        boat: {left,right};
+        passenger_1 : {c,m};
+        passenger_2 : {c,m,none};
+    DEFINE
+        canIndex := 1;
+        misIndex := 2;
+    INIT
+        boat = left & leftArr[canIndex] = 3 & leftArr[misIndex] = 3 & passenger_1 = m & passenger_2 = c;
+    DEFINE
+        rightCann := 3 - leftArr[canIndex];
+        rightMiss := 3 - leftArr[misIndex];
+    
+    DEFINE
+        n_canAvailable := case boat = left : leftArr[canIndex]; TRUE : rightCann; esac;
+        n_missAvailable := case boat = left : leftArr[misIndex]; TRUE : rightMiss; esac;
+    
+        property:= rightCann = 3 & rightMiss = 3;
+        canPassenger := toint(passenger_1 = c) + toint(passenger_2 = c);
+        missPassenger := toint(passenger_1 = m) + toint(passenger_2 = m);
+    TRANS
+        next(boat) != boat;
+    INVAR
+        n_missAvailable = 0 -> (passenger_1 != m & passenger_2 != m);
+    INVAR
+        n_missAvailable = 1 -> (passenger_1 != m | passenger_2 != m);
+    INVAR
+        n_canAvailable = 0 -> (passenger_1 != c & passenger_2 != c);
+    INVAR
+        n_canAvailable = 1 -> (passenger_1 != c | passenger_2 != c);
+    ASSIGN
+        next(leftArr[canIndex]) := case next(boat) = left & leftArr[canIndex] + canPassenger <=3 : leftArr[canIndex] + canPassenger; leftArr[canIndex] - canPassenger >=0: leftArr[canIndex] - canPassenger; TRUE: leftArr[canIndex]; esac;
+        next(leftArr[misIndex]) := case next(boat) = left & leftArr[misIndex] + missPassenger <=3 : leftArr[misIndex] + missPassenger; leftArr[misIndex] - missPassenger >=0: leftArr[misIndex] - missPassenger; TRUE: leftArr[canIndex]; esac;
+
+    DEFINE
+        canLeftOnRiver := case boat = left : leftArr[canIndex] - canPassenger; TRUE: rightCann - canPassenger;esac;  
+        misLeftOnRiver:= case boat = left : leftArr[misIndex] - missPassenger; TRUE: rightMiss - missPassenger; esac;
+    INVAR  
+        misLeftOnRiver = 0 | misLeftOnRiver >= canLeftOnRiver 
+    
+    LTLSPEC ! F property
