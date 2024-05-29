@@ -1,0 +1,66 @@
+MODULE gnomeSort (arr, len)
+    VAR
+        pos: 0..len;
+        pc: 10..15;
+    ASSIGN
+        init(pc) := 10;
+        init(pos) := 0;
+        next(pos) := case
+            next(pc = 13) & pos + 1 <= len  : pos + 1;
+            next(pc = 14) & pos - 1 > 0: pos - 1 ;
+            TRUE: pos;
+            esac;
+
+        next(pc):= case
+            (pc = 10): 11;
+            (pc = 11 & (pos + 1) > len  & (pos = 0 | arr[pos] >= arr[pos - 1]) ) : 15;
+            (pc = 11 & pos <= len ) : 12;
+            (pc = 12 & (pos = 0 | arr[pos] >= arr[pos - 1])) : 13;
+            (pc = 12 & !(pos = 0 | arr[pos] >= arr[pos - 1])) : 14; 
+            (pc = 13 | pc = 14) : 11; 
+            TRUE: pc;
+             esac;
+    DEFINE
+        swap := next(pc) = 14 ;
+
+MODULE main
+    VAR
+        arr: array 0..4 of {9,7,5,3,1};
+        sorter: gnomeSort(arr,4);
+    INIT
+        arr[0] = 9 &
+        arr[1] = 7 &
+        arr[2] = 5 &
+        arr[3] = 3 &
+        arr[4] = 1;
+    ASSIGN  
+        next(arr[0]) := case
+            sorter.pos = 1 & sorter.swap : arr[1];
+            TRUE: arr[0];
+        esac;
+        next(arr[1]) := case
+            sorter.pos = 1 & sorter.swap : arr[0];
+            sorter.pos = 2 & sorter.swap : arr[2];
+            TRUE: arr[1];
+        esac;
+        next(arr[2]) := case
+            sorter.pos = 2 & sorter.swap : arr[1];
+            sorter.pos = 3 & sorter.swap : arr[3];
+            TRUE: arr[2];
+        esac;
+        next(arr[3]) := case
+            sorter.pos = 3 & sorter.swap : arr[2];
+            sorter.pos = 4 & sorter.swap : arr[4];
+            TRUE: arr[3];
+        esac;
+
+        next(arr[4]) := case
+            sorter.pos = 4 & sorter.swap : arr[3];
+            TRUE: arr[4];
+        esac;
+    DEFINE 
+        sorted := arr[0] <= arr[1] & arr[1] <= arr[2] & arr[2] <= arr[3] & arr[3] <= arr[4];
+
+    LTLSPEC !G F sorter.pc = 15;
+    LTLSPEC !F G sorted;
+    LTLSPEC !F (!(sorter.pos = 15) U sorted);

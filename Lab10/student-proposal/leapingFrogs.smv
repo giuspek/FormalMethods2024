@@ -1,0 +1,87 @@
+MODULE main
+    VAR
+        rocks: array 1..7 of {g,b,none};
+        green_1: 1..7;
+        green_2: 1..7;
+        green_3: 1..7;
+        brown_1: 1..7;
+        brown_2: 1..7;
+        brown_3: 1..7;
+    INIT
+        rocks[1] = b &
+        rocks[2] = b &
+        rocks[3] = b &
+        rocks[4] = none &
+        rocks[5] = g &
+        rocks[6] = g &
+        rocks[7] = g;
+    INIT
+        brown_1 = 1 &
+        brown_2 = 2 &
+        brown_3 = 3 &
+        green_1 = 7 &
+        green_2 = 6 &
+        green_3 = 5;
+    DEFINE
+        property := rocks[1] = g & rocks[2] = g & rocks[3] = g & rocks[5] = b & rocks[6] = b & rocks[7] = b;
+
+        jump_g_1 := case (green_1 - 1 > 0 & rocks[green_1 - 1] = none) : green_1 - 1; (green_1 - 2 >0 & rocks[green_1 - 2] = none) : green_1 - 2; TRUE : -1;esac;
+        jump_g_2 := case (green_2 - 1 > 0 & rocks[green_2 - 1] = none) : green_2 - 1; (green_2 - 2 >0 & rocks[green_2 - 2] = none) : green_2 - 2; TRUE : -1;esac;
+        jump_g_3 := case (green_3 - 1 > 0 & rocks[green_3 - 1] = none) : green_3 - 1; (green_3 - 2 >0 & rocks[green_3 - 2] = none) : green_3 - 2; TRUE : -1;esac;
+        
+        jump_b_1 := case (brown_1 + 1 <= 7 & rocks[brown_1 + 1] = none) : brown_1 + 1; (brown_1 + 2 <= 7 & rocks[brown_1 + 2] = none) : brown_1 + 2; TRUE : -1;esac; 
+        jump_b_2 := case (brown_2 + 1 <= 7 & rocks[brown_2 + 1] = none) : brown_2 + 1; (brown_2 + 2 <= 7 & rocks[brown_2 + 2] = none) : brown_2 + 2; TRUE : -1;esac; 
+        jump_b_3 := case (brown_3 + 1 <= 7 & rocks[brown_3 + 1] = none) : brown_3 + 1; (brown_3 + 2 <= 7 & rocks[brown_3 + 2] = none) : brown_3 + 2; TRUE : -1;esac; 
+    
+        canJump_g_1 := jump_g_1 != -1;
+        canJump_g_2 := jump_g_2 != -1;
+        canJump_g_3 := jump_g_3 != -1;
+    
+        canJump_b_1 := jump_b_1 != -1;
+        canJump_b_2 := jump_b_2 != -1;
+        canJump_b_3 := jump_b_3 != -1;
+    
+    ASSIGN
+        next(green_1):= case !canJump_g_1 : green_1; TRUE: {jump_g_1, green_1} ;esac;
+        next(green_2):= case !canJump_g_2 : green_2; TRUE: {jump_g_2, green_2} ;esac;
+        next(green_3):= case !canJump_g_3 : green_3; TRUE: {jump_g_3, green_3} ;esac;
+
+        next(brown_1):= case !canJump_b_1 : brown_1; TRUE: {jump_b_1,brown_1} ;esac;
+        next(brown_2):= case !canJump_b_2 : brown_2; TRUE: {jump_b_2,brown_2} ;esac;
+        next(brown_3):= case !canJump_b_3 : brown_3; TRUE: {jump_b_3,brown_3} ;esac;
+    TRANS
+        --- only one frog must jump
+        (next(green_1) != green_1 ) -> (next(green_2) = green_2 ) & (next(green_3) = green_3 ) & (next(brown_1) = brown_1 ) & (next(brown_2) = brown_2 ) & (next(brown_3) = brown_3 ) ;
+    TRANS
+        (next(green_2) != green_2 ) -> (next(green_1) = green_1 ) & (next(green_3) = green_3 ) & (next(brown_1) = brown_1 ) & (next(brown_2) = brown_2 ) & (next(brown_3) = brown_3 ) ;
+    TRANS
+        (next(green_3) != green_3 ) -> (next(green_2) = green_2 ) & (next(green_1) = green_1 ) & (next(brown_1) = brown_1 ) & (next(brown_2) = brown_2 ) & (next(brown_3) = brown_3 ) ;
+    TRANS
+        (next(brown_1) != brown_1 ) -> (next(green_2) = green_2 ) & (next(green_3) = green_3 ) & (next(green_1) = green_1 ) & (next(brown_2) = brown_2 ) & (next(brown_3) = brown_3 ) ;
+    TRANS
+        (next(brown_2) != brown_2 ) -> (next(green_2) = green_2 ) & (next(green_3) = green_3 ) & (next(green_1) = green_1 ) & (next(brown_1) = brown_1 ) & (next(brown_3) = brown_3 ) ;
+    TRANS
+        (next(brown_3) != brown_3 ) -> (next(green_2) = green_2 ) & (next(green_3) = green_3 ) & (next(green_1) = green_1 ) & (next(brown_2) = brown_2 ) & (next(brown_1) = brown_1 ) ;
+    
+    TRANS
+    --at least one frog must jump
+        next(green_1) != green_1 |
+        next(green_2) != green_2 |
+        next(green_3) != green_3 |
+        next(brown_1) != brown_1 |
+        next(brown_2) != brown_2 |
+        next(brown_3) != brown_3 ;
+    -- cell values must change
+    ASSIGN
+        next(rocks[1]) := case (next(green_1) = 1 | next(green_2) = 1 | next(green_3) = 1 ) : g; (next(brown_1) = 1 | next(brown_2) = 1 | next(brown_3) = 1 ) : b; TRUE : none;esac;
+        next(rocks[2]) := case (next(green_1) = 2 | next(green_2) = 2 | next(green_3) = 2 ) : g; (next(brown_1) = 2 | next(brown_2) = 2 | next(brown_3) = 2 ) : b; TRUE : none;esac;
+        next(rocks[3]) := case (next(green_1) = 3 | next(green_2) = 3 | next(green_3) = 3 ) : g; (next(brown_1) = 3 | next(brown_2) = 3 | next(brown_3) = 3 ) : b; TRUE : none;esac;
+        next(rocks[4]) := case (next(green_1) = 4 | next(green_2) = 4 | next(green_3) = 4 ) : g; (next(brown_1) = 4 | next(brown_2) = 4 | next(brown_3) = 4 ) : b; TRUE : none;esac;
+        next(rocks[5]) := case (next(green_1) = 5 | next(green_2) = 5 | next(green_3) = 5 ) : g; (next(brown_1) = 5 | next(brown_2) = 5 | next(brown_3) = 5 ) : b; TRUE : none;esac;
+        next(rocks[6]) := case (next(green_1) = 6 | next(green_2) = 6 | next(green_3) = 6 ) : g; (next(brown_1) = 6 | next(brown_2) = 6 | next(brown_3) = 6 ) : b; TRUE : none;esac;
+        next(rocks[7]) := case (next(green_1) = 7 | next(green_2) = 7 | next(green_3) = 7 ) : g; (next(brown_1) = 7 | next(brown_2) = 7 | next(brown_3) = 7 ) : b; TRUE : none;esac;
+
+
+
+    LTLSPEC ! F property
+    LTLSPEC  F property

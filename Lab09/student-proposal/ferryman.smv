@@ -1,0 +1,49 @@
+MODULE main
+    VAR 
+        man : {left,right};
+        fox : {left,right};
+        chicken : {left,right};
+        caterpillar : {left,right};
+        lettuce : {left,right};
+        move: array 1..2 of {f,ch,ca,l,empty};
+    DEFINE  
+
+        move_fox := move[1] = f | move[2] = f;
+        move_chicken := move[1] = ch | move[2] = ch;
+        move_caterpillar := move[1] = ca | move[2] = ca;
+        move_lettuce := move[1] = l | move[2] = l;
+        empty_trans := move[1] = empty | move[2] = empty;
+
+        property := fox = left & chicken = fox & caterpillar = fox & lettuce = fox;
+    INIT  
+        man = right & fox = right & chicken = man & caterpillar = man & lettuce = man  ;
+    INVAR
+        (man != fox -> (fox != chicken) ) & (man != chicken -> (chicken != caterpillar)) & (man != caterpillar -> caterpillar != lettuce);
+    INVAR
+        (move[1] != move [2]) | (move[1] = empty & move[2] = empty);
+    TRANS
+        property -> (next(move[1]) = empty & next(move[2]) = empty)
+    TRANS
+        ! move_chicken -> next(chicken) = chicken;
+    TRANS
+        ! move_fox -> next(fox) = fox;
+    TRANS    
+        ! move_caterpillar -> next(caterpillar) = caterpillar;
+    TRANS    
+        ! move_lettuce -> next(lettuce) = lettuce;
+    TRANS
+        move_chicken -> next(chicken) != chicken;
+    TRANS
+        move_fox -> next(fox) != fox;
+    TRANS    
+        move_caterpillar -> next(caterpillar) != caterpillar;
+    TRANS    
+        move_lettuce -> next(lettuce) != lettuce;
+    TRANS
+        next(man) != man
+
+        
+
+
+
+    LTLSPEC ! F property
