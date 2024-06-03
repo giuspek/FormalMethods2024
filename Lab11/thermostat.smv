@@ -1,0 +1,42 @@
+@TIME_DOMAIN continuous
+
+MODULE main
+	VAR
+		state : {on, off};
+		dt : clock;
+		temperature : real;
+	FROZENVAR
+		max_dt : real;
+
+	INIT
+		temperature >= 18 - max_dt;
+	INIT
+		temperature <= 18 + max_dt;
+
+	INIT
+		temperature >= 18 -> state = off;
+	INIT
+		temperature <= 18 -> state = on;
+	INIT
+		dt = 0;
+
+	INVAR
+		TRUE -> dt < max_dt;
+
+	ASSIGN
+		next(state) := case
+			next(temperature) < 18 : on; 
+			next(temperature) > 18 : off;
+			TRUE: state;
+		esac;
+
+		next(temperature) := case
+			state = on : temperature + dt;
+			TRUE : temperature - dt;
+		esac;
+
+		next(dt) := 0;
+
+INVARSPEC (temperature >= 18 - 2 * max_dt) 
+INVARSPEC (temperature <= 18 + 2 * max_dt)
+
