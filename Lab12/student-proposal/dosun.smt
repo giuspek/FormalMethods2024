@@ -116,172 +116,92 @@
 (assert ( not (= x55 black)))
 
 -- exctly one baloon and iron
-(assert (= 1
-    (+
-        (ite (= x11 baloon) 1 0)
-        (ite (= x21 baloon) 1 0)
-        (ite (= x31 baloon) 1 0)
-        (ite (= x41 baloon) 1 0)
-        (ite (= x51 baloon) 1 0)
-        (ite (= x52 baloon) 1 0)
-    )
-))
+(assert (= 1 (+ (ite (= x11 baloon) 1 0) (ite (= x21 baloon) 1 0) (ite (= x31 baloon) 1 0) (ite (= x41 baloon) 1 0) (ite (= x51 baloon) 1 0) (ite (= x52 baloon) 1 0) )))
 
 
-(assert (= 1
-    (+
-        (ite (= x11 iron) 1 0)
-        (ite (= x21 iron) 1 0)
-        (ite (= x31 iron) 1 0)
-        (ite (= x41 iron) 1 0)
-        (ite (= x51 iron) 1 0)
-        (ite (= x52 iron) 1 0)
-    )
-))
+(assert (= 1 (+ (ite (= x11 iron) 1 0) (ite (= x21 iron) 1 0) (ite (= x31 iron) 1 0) (ite (= x41 iron) 1 0) (ite (= x51 iron) 1 0) (ite (= x52 iron) 1 0) )))
 
-(assert (= 1
-    (+
-        (ite (= x22 baloon) 1 0)
-        (ite (= x32 baloon) 1 0)
-        (ite (= x42 baloon) 1 0)
-    )
-))
+(assert (= 1 (+ (ite (= x22 baloon) 1 0) (ite (= x32 baloon) 1 0) (ite (= x42 baloon) 1 0) )))
 
-(assert (= 1
-    (+
-        (ite (= x22 iron) 1 0)
-        (ite (= x32 iron) 1 0)
-        (ite (= x42 iron) 1 0)
-    )
-))
+(assert (= 1 (+ (ite (= x22 iron) 1 0) (ite (= x32 iron) 1 0) (ite (= x42 iron) 1 0) )))
 
-(assert (= 1
-    (+
-        (ite (= x53 baloon) 1 0)
-        (ite (= x54 baloon) 1 0)
-        (ite (= x55 baloon) 1 0)
-    )
-))
+(assert (= 1 (+ (ite (= x53 baloon) 1 0) (ite (= x54 baloon) 1 0) (ite (= x55 baloon) 1 0) )))
 
-(assert (= 1
-    (+
-        (ite (= x53 iron) 1 0)
-        (ite (= x54 iron) 1 0)
-        (ite (= x55 iron) 1 0)
-    )
-))
-----
+(assert (= 1 (+ (ite (= x53 iron) 1 0) (ite (= x54 iron) 1 0) (ite (= x55 iron) 1 0) )))
 
-(assert (= 1
-    (+
-        (ite (= x13 baloon) 1 0)
-        (ite (= x23 baloon) 1 0)
-        (ite (= x33 baloon) 1 0)
-    )
-))
+(assert (= 1 (+ (ite (= x13 baloon) 1 0) (ite (= x23 baloon) 1 0) (ite (= x33 baloon) 1 0) )))
 
-(assert (= 1
-    (+
-        (ite (= x13 iron) 1 0)
-        (ite (= x23 iron) 1 0)
-        (ite (= x33 iron) 1 0)
-    )
-))
-----
-(assert (= 1
-    (+
-        (ite (= x24 iron) 1 0)
-        (ite (= x34 iron) 1 0)
-        (ite (= x44 iron) 1 0)
-    )
-))
-(assert (= 1
-    (+
-        (ite (= x24 baloon) 1 0)
-        (ite (= x34 baloon) 1 0)
-        (ite (= x44 baloon) 1 0)
-    )
-))
+(assert (= 1 (+ (ite (= x13 iron) 1 0) (ite (= x23 iron) 1 0) (ite (= x33 iron) 1 0) )))
+(assert (= 1 (+ (ite (= x24 iron) 1 0) (ite (= x34 iron) 1 0) (ite (= x44 iron) 1 0) )))
+(assert (= 1 (+ (ite (= x24 baloon) 1 0) (ite (= x34 baloon) 1 0) (ite (= x44 baloon) 1 0) )))
+(assert (= 1 (+ (ite (= x14 baloon) 1 0) (ite (= x15 baloon) 1 0) (ite (= x25 baloon) 1 0) (ite (= x35 baloon) 1 0))))
+(assert (= 1 (+ (ite (= x14 iron) 1 0) (ite (= x15 iron) 1 0) (ite (= x25 iron) 1 0) (ite (= x35 iron) 1 0))))
 
-------
+; new encoding
+
+(assert (=> (and (not (= x11 black)) (not (= x11 baloon)) )  (not (= x21 baloon))))
+(assert (=> (and (not (= x21 black)) (not (= x21 baloon)) )  (not (= x31 baloon))))
+(assert (=> (and (not (= x31 black)) (not (= x31 baloon)) )  (not (= x41 baloon))))
+(assert (=> (and (not (= x41 black)) (not (= x41 baloon)) )  (not (= x51 baloon))))
+
+(assert (=> (and (not (= x12 black)) (not (= x12 baloon)) )  (not (= x22 baloon))))
+(assert (=> (and (not (= x22 black)) (not (= x22 baloon)) )  (not (= x32 baloon))))
+(assert (=> (and (not (= x32 black)) (not (= x32 baloon)) )  (not (= x42 baloon))))
+(assert (=> (and (not (= x42 black)) (not (= x42 baloon)) )  (not (= x52 baloon))))
+
+(assert (=> (and (not (= x13 black)) (not (= x13 baloon)) )  (not (= x23 baloon))))
+(assert (=> (and (not (= x23 black)) (not (= x23 baloon)) )  (not (= x33 baloon))))
+(assert (=> (and (not (= x33 black)) (not (= x33 baloon)) )  (not (= x43 baloon))))
+(assert (=> (and (not (= x43 black)) (not (= x43 baloon)) )  (not (= x53 baloon))))
+
+(assert (=> (and (not (= x14 black)) (not (= x14 baloon)) )  (not (= x24 baloon))))
+(assert (=> (and (not (= x24 black)) (not (= x24 baloon)) )  (not (= x34 baloon))))
+(assert (=> (and (not (= x34 black)) (not (= x34 baloon)) )  (not (= x44 baloon))))
+(assert (=> (and (not (= x44 black)) (not (= x44 baloon)) )  (not (= x54 baloon))))
+
+(assert (=> (and (not (= x15 black)) (not (= x15 baloon)) )  (not (= x25 baloon))))
+(assert (=> (and (not (= x25 black)) (not (= x25 baloon)) )  (not (= x35 baloon))))
+(assert (=> (and (not (= x35 black)) (not (= x35 baloon)) )  (not (= x45 baloon))))
+(assert (=> (and (not (= x45 black)) (not (= x45 baloon)) )  (not (= x55 baloon))))
 
 
-(assert (= 1
-    (+
-        (ite (= x14 baloon) 1 0)
-        (ite (= x15 baloon) 1 0)
-        (ite (= x25 baloon) 1 0)
-        (ite (= x35 baloon) 1 0)
-    )
-))
 
-(assert (= 1
-    (+
-        (ite (= x14 iron) 1 0)
-        (ite (= x15 iron) 1 0)
-        (ite (= x25 iron) 1 0)
-        (ite (= x35 iron) 1 0)
-    )
-))
+(assert (=> (and (not (= x51 black)) (not (= x51 iron)) )  (not (= x41 iron))))
+(assert (=> (and (not (= x41 black)) (not (= x41 iron)) )  (not (= x31 iron))))
+(assert (=> (and (not (= x31 black)) (not (= x31 iron)) )  (not (= x21 iron))))
+(assert (=> (and (not (= x21 black)) (not (= x21 iron)) )  (not (= x11 iron))))
 
-(assert (= x11 baloon))
-(assert ( or
-    (= x51 iron) (= x52 iron) ))
+(assert (=> (and (not (= x52 black)) (not (= x52 iron)) )  (not (= x42 iron))))
+(assert (=> (and (not (= x42 black)) (not (= x42 iron)) )  (not (= x32 iron))))
+(assert (=> (and (not (= x32 black)) (not (= x32 iron)) )  (not (= x22 iron))))
+(assert (=> (and (not (= x22 black)) (not (= x22 iron)) )  (not (= x12 iron))))
 
-(assert (= x22 baloon))
-(assert (= x42 iron))
+(assert (=> (and (not (= x53 black)) (not (= x53 iron)) )  (not (= x43 iron))))
+(assert (=> (and (not (= x43 black)) (not (= x43 iron)) )  (not (= x33 iron))))
+(assert (=> (and (not (= x33 black)) (not (= x33 iron)) )  (not (= x23 iron))))
+(assert (=> (and (not (= x23 black)) (not (= x23 iron)) )  (not (= x13 iron))))
 
-(assert (= x33 iron))
-(assert (= x13 baloon))
+(assert (=> (and (not (= x53 black)) (not (= x53 iron)) )  (not (= x43 iron))))
+(assert (=> (and (not (= x43 black)) (not (= x43 iron)) )  (not (= x33 iron))))
+(assert (=> (and (not (= x33 black)) (not (= x33 iron)) )  (not (= x23 iron))))
+(assert (=> (and (not (= x23 black)) (not (= x23 iron)) )  (not (= x13 iron))))
 
-(assert (= x24 baloon))
-(assert (= x44 iron))
+(assert (=> (and (not (= x54 black)) (not (= x54 iron)) )  (not (= x44 iron))))
+(assert (=> (and (not (= x44 black)) (not (= x44 iron)) )  (not (= x34 iron))))
+(assert (=> (and (not (= x34 black)) (not (= x34 iron)) )  (not (= x24 iron))))
+(assert (=> (and (not (= x24 black)) (not (= x24 iron)) )  (not (= x14 iron))))
+
+(assert (=> (and (not (= x55 black)) (not (= x55 iron)) )  (not (= x45 iron))))
+(assert (=> (and (not (= x45 black)) (not (= x45 iron)) )  (not (= x35 iron))))
+(assert (=> (and (not (= x35 black)) (not (= x35 iron)) )  (not (= x25 iron))))
+(assert (=> (and (not (= x25 black)) (not (= x25 iron)) )  (not (= x15 iron))))
 
 
-(assert (= x35 iron))
-
-(assert ( or
-    (= x14 baloon) (= x15 baloon) ))
-
-(assert (= (= x42 iron) (= x52 iron)))
-(assert (= (= x44 iron) (= x54 iron)))
-(assert (= (= x24 baloon) (= x14 baloon)))
 
 
 ; check if unique
 
-(assert (not (and
-  (= x11 2)
-  (= x21 1)
-  (= x31 1)
-  (= x41 1)
-  (= x51 1)
-  (= x12 4)
-  (= x22 2)
-  (= x32 1)
-  (= x42 3)
-  (= x52 3)
-  (= x13 2)
-  (= x23 1)
-  (= x33 3)
-  (= x43 4)
-  (= x53 2)
-  (= x14 2)
-  (= x24 2)
-  (= x34 1)
-  (= x44 3)
-  (= x54 3)
-  (= x15 1)
-  (= x25 1)
-  (= x35 3)
-  (= x45 4)
-  (= x55 1)
-
-)))
-
-
-
-
+(assert (not (and  (= x11 2)  (= x21 1)  (= x31 1)  (= x41 1)  (= x51 1)  (= x12 4)  (= x22 2)  (= x32 1)  (= x42 3)  (= x52 3)  (= x13 2)  (= x23 1)  (= x33 3)  (= x43 4)  (= x53 2)  (= x14 2)  (= x24 2)  (= x34 1)  (= x44 3)  (= x54 3)  (= x15 1)  (= x25 1)  (= x35 3)  (= x45 4)  (= x55 1))))
 (check-sat)
 (get-model)
 (exit)
