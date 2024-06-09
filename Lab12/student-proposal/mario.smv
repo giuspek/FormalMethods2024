@@ -1,0 +1,54 @@
+MODULE main
+    FROZENVAR
+        cell: array 1..16 of boolean;
+    VAR
+        dice: 1..4;
+        player: 1..5;
+        index: 0..16;
+    DEFINE
+        speed := TRUE;
+        regular := FALSE;
+    INIT
+        player = 1 & index = 0 &
+        cell[1] = regular &
+        cell[2] = regular &
+        cell[3] = regular &
+        cell[4] = speed &
+        cell[5] = speed &
+        cell[6] = regular &
+        cell[7] = regular &
+        cell[8] = speed &
+        cell[9] = speed &
+        cell[10] = regular &
+        cell[11] = regular &
+        cell[12] = regular &
+        cell[13] = speed &
+        cell[14] = regular &
+        cell[15] = regular &
+        cell[16] = regular
+        ;
+    TRANS
+        next(dice) != dice;
+    ASSIGN
+        next(index) := case
+            player < 5 : min(16,index+dice);
+            TRUE : index;
+        esac;
+        
+        next(player) := case
+            index = 0 : player;
+            cell[index] = regular: min(player+1, 5);
+            TRUE: player;
+        esac;
+
+    DEFINE
+        property1 := (player < 5) & index = 16;
+        property2 := (player = 5) & index < 16;
+        property3 := (cell[index] = speed | index = 0 | index = 16);
+        property4 := (index = 16 & player = 1);
+
+    LTLSPEC ! F property1
+    LTLSPEC ! F property2
+    LTLSPEC !(F property1 & G property3)
+    LTLSPEC ! F property4
+    
